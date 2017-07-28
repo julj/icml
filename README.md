@@ -13,8 +13,8 @@ Submission is aimed at being improved by the community to offer a free and gener
  
 ### 1 - Clone the repository
 ```
-$ git clone https://github.com/julj/submission.git
-$ cd submission
+$ git clone https://github.com/julj/icml.git
+$ cd icml
 ```
  
 ### 2 - Create the db backup volume to be mounted
@@ -23,26 +23,26 @@ $ cd submission
 ### 3 - Run [postgres container](https://hub.docker.com/_/postgres/) and mount database to host volume
 ```
 $ docker run \
-    --name submission_db \
+    --name icml_db \
     -v $(pwd)/db_backup:/var/lib/postgresql/data/pgdata \
     -e POSTGRES_USER=myuser \
     -e POSTGRES_PASSWORD=mypassword \
-    -e POSTGRES_DB=submission_db \
+    -e POSTGRES_DB=icml_db \
     -e PGDATA=/var/lib/postgresql/data/pgdata \
     -d postgres
 ```
  
 ### 4 - Build flask app
-`$ docker build -t submission .`
+`$ docker build -t icml .`
  
 ### 5 - Run flask app and link to database container
-`$ docker run --name submission --link submission_db:submission_db -p 5455:80 -v $(pwd)/app:/app -d submission`
+`$ docker run --name icml --link icml_db:icml_db -p 5455:80 -v $(pwd)/app:/app -d icml`
  
 ### 6 - Initialize db and migrate (https://flask-migrate.readthedocs.io/en/latest/)
 ```
-$ docker exec submission python /app/manage.py db init
-$ docker exec submission python /app/manage.py db migrate
-$ docker exec submission python /app/manage.py db upgrade
+$ docker exec icml python /app/manage.py db init
+$ docker exec icml python /app/manage.py db migrate
+$ docker exec icml python /app/manage.py db upgrade
 ```
  
 ### 7 - Enjoy
@@ -52,9 +52,9 @@ Now the app is available at http://example.com:5455
 
 #### Logs
 The logs of the app (nginx, uwsgi, Flask errors...) can be seen with
-`docker logs <submissioncontainerid>`
+`docker logs <icmlcontainerid>`
 
-where `<submissioncontainerid>` can be seen with
+where `<icmlcontainerid>` can be seen with
 
 `docker ps`
 
@@ -64,7 +64,7 @@ If you change the models, make sure to run the migrations, which are managed by 
 #### Supervisord
 After any change, restart uwsgi:
 
-`docker exec submission supervisorctl restart uwsgi`
+`docker exec icml supervisorctl restart uwsgi`
 
  
 # ADMINISTRATION
